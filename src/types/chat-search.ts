@@ -10,5 +10,6 @@ export type TChatSearchResult = {
     title: string | null
     pageContent: string | null
   }>
+  answer?: string
   error?: string
 }

@@ -121,24 +121,18 @@ export default function PublicChatDetailPage() {
 
     try {
       // --- API request to /api/chat-search ---
-      const payload: TChatSearchRequest = { query: message, limit: 1 }
+      const payload: TChatSearchRequest = { query: message, limit: 5 }
       const data = await postToApi<TChatSearchResult, TChatSearchRequest>(
         "chat-search",
         payload
       )
       let aiContent = ""
-      if (
-        data &&
-        data.results &&
-        data.results.length > 0 &&
-        data.results[0].pageContent
-      ) {
-        aiContent = data.results[0].pageContent
+      if (data && data.answer && data.answer.trim().length > 0) {
+        aiContent = data.answer
       } else {
         aiContent =
           "Sorry, I couldn't find relevant information in the indexed website(s)."
       }
-      // Create a demo AI response
       const aiMessage: TMessage = {
         id: `assistant-${Date.now()}`,
         content: aiContent,

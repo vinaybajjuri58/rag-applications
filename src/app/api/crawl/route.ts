@@ -2,39 +2,43 @@ import { NextRequest, NextResponse } from "next/server"
 import {
   crawlWebsite,
   chunkDocuments,
-  embedDocumentsWithCohere,
-} from "@/lib/crawl"
-import { upsertChunksToQdrant } from "@/utils/qdrant"
+  generateEmbeddings,
+  storeChunks,
+  CrawlOptions,
+} from "@/lib/rag"
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const { url, crawlOptions, chunkOptions } = body as {
       url: string
-      crawlOptions?: Parameters<typeof crawlWebsite>[1]
-      chunkOptions?: Parameters<typeof chunkDocuments>[1]
+      crawlOptions?: CrawlOptions
+      chunkOptions?: CrawlOptions
     }
-    if (!url) {
+
+    if (!url?.trim()) {
       return NextResponse.json(
-        { error: "Missing 'url' in request body" },
+        { error: "Missing or invalid 'url' in request body" },
         { status: 400 }
       )
     }
+
+    // Crawl and chunk the website
     const docs = await crawlWebsite(url, crawlOptions)
     const chunks = await chunkDocuments(docs, chunkOptions)
-    const vectors = await embedDocumentsWithCohere(chunks)
-    await upsertChunksToQdrant(chunks, vectors)
-    return NextResponse.json({
-      message: "Chunks embedded and stored in Qdrant.",
-      count: chunks.length,
-      preview: chunks.slice(0, 3).map((c) => ({
-        url: c.metadata?.source || null,
-        title: c.metadata?.title || null,
-      })),
-    })
+
+    // Generate embeddings and store in Qdrant
+    const embeddings = await generateEmbeddings(chunks)
+    await storeChunks(chunks, embeddings)
+
+    return NextResponse.json({ chunks })
   } catch (error) {
+    console.error("[RAG] Error processing website:", error)
     return NextResponse.json(
-      { error: (error as Error).message },
+      {
+        error: "Failed to process website. Please try again.",
+        details: (error as Error).message,
+      },
       { status: 500 }
     )
   }
