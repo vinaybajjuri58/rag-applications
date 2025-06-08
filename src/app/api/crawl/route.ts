@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const embeddings = await generateEmbeddings(chunks)
     await storeChunks(chunks, embeddings)
 
-    return NextResponse.json({ chunks })
+    return NextResponse.json({ chunks: chunks.length })
   } catch (error) {
     console.error("[RAG] Error processing website:", error)
     return NextResponse.json(

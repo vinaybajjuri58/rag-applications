@@ -48,26 +48,8 @@ export const CrawlResult: React.FC<CrawlResultProps> = ({
         {crawlResult && "chunks" in crawlResult && (
           <div className="text-sm">
             <div className="mb-2 font-medium text-green-700">
-              Chunks received: {crawlResult.chunks.length}
+              Chunks received: {crawlResult.chunks}
             </div>
-            <ul className="divide-y divide-border bg-muted rounded">
-              {crawlResult.chunks.map((chunk, idx) => (
-                <li
-                  key={idx}
-                  className="py-2 px-2 flex flex-col md:flex-row md:items-center gap-1 md:gap-4"
-                >
-                  <span
-                    className="truncate text-xs text-primary font-mono"
-                    title={String(chunk.metadata?.source ?? "")}
-                  >
-                    {String(chunk.metadata?.source ?? "(no url)")}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {chunk.metadata?.title ? `— ${chunk.metadata.title}` : ""}
-                  </span>
-                </li>
-              ))}
-            </ul>
           </div>
         )}
       </CardContent>
