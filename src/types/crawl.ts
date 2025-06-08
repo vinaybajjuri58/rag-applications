@@ -15,6 +15,6 @@ export type TCrawlRequestPayload = {
 
 export type TCrawlResponse =
   | {
-      chunks: Array<{ pageContent: string; metadata: Record<string, unknown> }>
+      chunks: number
     }
   | { error: string }
