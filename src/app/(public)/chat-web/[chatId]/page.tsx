@@ -69,16 +69,6 @@ export default function PublicChatDetailPage() {
     setCrawlError(null)
     setCrawlLoading(true)
 
-    const systemMessage: TMessage = {
-      id: `system-${Date.now()}`,
-      content: `Website URL added: ${websiteUrl}`,
-      role: TMessageRole.Assistant,
-      createdAt: new Date().toISOString(),
-      chatId,
-    }
-    setMessages((prev) => [...prev, systemMessage])
-    setWebsiteUrl("")
-
     // --- API request to /api/crawl using postToApi ---
     const payload: TCrawlRequestPayload = {
       url: websiteUrl,
@@ -99,6 +89,15 @@ export default function PublicChatDetailPage() {
     } finally {
       setCrawlLoading(false)
     }
+    const systemMessage: TMessage = {
+      id: `system-${Date.now()}`,
+      content: `Website URL added: ${websiteUrl}`,
+      role: TMessageRole.Assistant,
+      createdAt: new Date().toISOString(),
+      chatId,
+    }
+    setMessages((prev) => [...prev, systemMessage])
+    setWebsiteUrl("")
   }
 
   const handleSendMessage = async (message: string) => {

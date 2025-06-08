@@ -7,6 +7,7 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card"
+import { Loader } from "lucide-react"
 
 interface CrawlResultProps {
   crawlResult: TCrawlResponse | null
@@ -33,6 +34,7 @@ export const CrawlResult: React.FC<CrawlResultProps> = ({
       <CardContent>
         {crawlLoading && (
           <div className="text-sm text-primary flex items-center gap-2">
+            <Loader className="h-4 w-4 animate-spin" />
             <span className="animate-pulse">
               Crawling and chunking website...
             </span>
@@ -56,9 +58,9 @@ export const CrawlResult: React.FC<CrawlResultProps> = ({
                 >
                   <span
                     className="truncate text-xs text-primary font-mono"
-                    title={chunk.metadata?.source || ""}
+                    title={String(chunk.metadata?.source ?? "")}
                   >
-                    {chunk.metadata?.source || "(no url)"}
+                    {String(chunk.metadata?.source ?? "(no url)")}
                   </span>
                   <span className="text-xs text-muted-foreground">
                     {chunk.metadata?.title ? `— ${chunk.metadata.title}` : ""}
