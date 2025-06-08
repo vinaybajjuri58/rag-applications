@@ -9,7 +9,7 @@ import { TypingIndicator } from "@/components/TypingIndicator"
 import { MessageInput } from "@/components/MessageInput"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { RefreshCw, Link } from "lucide-react"
+import { Link } from "lucide-react"
 import type { TCrawlRequestPayload, TCrawlResponse } from "@/types/crawl"
 import { postToApi } from "@/utils/api"
 import { CrawlResult } from "@/components/CrawlResult"
@@ -156,21 +156,6 @@ export default function PublicChatDetailPage() {
     }
   }
 
-  // Reset the chat
-  const handleResetChat = () => {
-    const welcomeMessage: TMessage = {
-      id: `welcome-${Date.now()}`,
-      content:
-        "👋 Hello! I'm an AI assistant. How can I help you today? You can ask me questions about a website by entering its URL above.",
-      role: TMessageRole.Assistant,
-      createdAt: new Date().toISOString(),
-      chatId,
-    }
-
-    setMessages([welcomeMessage])
-    setSubmittedUrl(null)
-  }
-
   if (loading && !chat) {
     return (
       <div className="w-full md:w-4/5 lg:w-3/5 mx-auto p-6 space-y-4">
@@ -185,32 +170,6 @@ export default function PublicChatDetailPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-semibold">
-            {chat?.title || "Demo Chat"}
-          </h1>
-          {chat && (
-            <p className="text-sm text-muted-foreground">
-              {new Date(chat.createdAt).toLocaleDateString()}
-            </p>
-          )}
-          <div className="text-xs mt-1 text-amber-500">
-            Demo Mode - Conversations are not saved
-          </div>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleResetChat}
-          title="Reset chat"
-        >
-          <RefreshCw className="h-4 w-4" />
-          <span className="sr-only">Reset</span>
-        </Button>
-      </div>
-
-      {/* Website URL input */}
       <div className="w-full md:w-4/5 lg:w-3/5 mx-auto p-4 border-b">
         <div className="flex items-center gap-2">
           <Link className="h-4 w-4 text-muted-foreground" />

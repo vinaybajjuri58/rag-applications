@@ -6,7 +6,7 @@ import OpenAI from "openai"
 import crypto from "crypto"
 
 // Constants
-export const QDRANT_COLLECTION = "rag_chunks_v3"
+export const QDRANT_COLLECTION = "supabase_rag"
 const QDRANT_VECTOR_SIZE = 1536
 const BATCH_SIZE = 25 // Reduced batch size for reliability
 const MAX_CONTENT_LENGTH = 8000
